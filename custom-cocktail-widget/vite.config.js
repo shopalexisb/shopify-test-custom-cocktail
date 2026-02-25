@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: path.resolve(__dirname, "../extensions/custom-cocktail/assets"),
     emptyOutDir: false,
     rollupOptions: {
-      input: path.resolve(__dirname, "src/widget.jsx"),
+      input: path.resolve(__dirname, "src/widget.tsx"),
       output: {
         entryFileNames: "widget.js",
         format: "iife",
