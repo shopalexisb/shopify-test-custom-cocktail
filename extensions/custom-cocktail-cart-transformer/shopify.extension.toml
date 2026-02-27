@@ -1,0 +1,21 @@
+api_version = "2026-01"
+
+[[extensions]]
+name = "t:name"
+handle = "custom-cocktail-cart-transformer"
+type = "function"
+uid = "c4b7b544-7cca-2f72-d406-850fd93f234bb4aa76ec"
+description = "t:description"
+
+  [[extensions.targeting]]
+  target = "cart.transform.run"
+  input_query = "src/cart_transform_run.graphql"
+  export = "cart-transform-run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
+
+  [extensions.ui.paths]
+  create = "/"
+  details = "/"

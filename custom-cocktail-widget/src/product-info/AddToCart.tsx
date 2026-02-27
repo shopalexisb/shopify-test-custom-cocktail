@@ -4,7 +4,7 @@ export const AddToCart= () => {
 
   const doAddToCart = async () => {
     try {
-      await fetch('/cart/add.js', {
+      const response = await fetch('/cart/add.js', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -14,13 +14,18 @@ export const AddToCart= () => {
           //48475839922405 30 day serving
           //48475917615333 90 day serving
           quantity: 1,
+          properties: {
+            formula: "123_ABCDE",
+            _computedPrice: "155.99" //price override
+          }
         }),
       });
 
-      //TODO: need to refresh the cart items before opening the drawer
-
-      //open cart drawer
-      document.querySelector<HTMLElement>('[href="/cart"]')?.click();
+      if (response.ok) {
+        //TODO: refresh the cart
+        //Open the cart drawer
+        document.querySelector<HTMLElement>('[href="/cart"]')?.click();
+      }
 
     } catch (error) {
       console.error('Error adding custom cocktail to cart:', error);
