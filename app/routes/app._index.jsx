@@ -135,7 +135,7 @@ export default function Index() {
 
   useEffect(() => {
     if (fetcher.data?.product?.id) {
-      shopify.toast.show("Product created");
+      shopify.toast.show("CustomProduct created");
     }
   }, [fetcher.data?.product?.id, shopify]);
   const generateProduct = () => fetcher.submit({}, { method: "POST" });
@@ -203,7 +203,7 @@ export default function Index() {
           {fetcher.data?.product && (
             <s-button
               onClick={() => {
-                shopify.intents.invoke?.("edit:shopify/Product", {
+                shopify.intents.invoke?.("edit:shopify/CustomProduct", {
                   value: fetcher.data?.product?.id,
                 });
               }}

@@ -1,26 +1,68 @@
 import React, { useEffect, useState } from "react";
+import { CustomProduct, ProductOption } from "./CustomProduct";
 
 export const ProductDetails= () => {
-  const [data, setData] = useState([]);
+  const [ccProductData, setCCProductData] = useState<CustomProduct>();
+
+  const fetchProductDetails = async (
+  ): Promise<CustomProduct> => {
+    try {
+      const productResponse = await fetch('https://stagingapi2.shop.com/store-products/v3/Product/Skus/13993,13992?siteId=260&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba');
+      const result = await productResponse.json();
+      const productData = result[0];
+      const permutations =
+        productData?.optionData?.permutationData?.adjacentPermutations || {};
+      const options: ProductOption[] = Object.values(permutations).map(
+        (perm: any) => ({
+          prompt: "Select Serving Size: ",
+          value: perm.permutationString,
+          sku: perm.merchantSKU
+        })
+      );
+      console.log(JSON.stringify(productResponse));
+      return {
+        imageUrl: productData.mainImage?.imageUrl,
+        title: productData.catalogName,
+        description: productData.description,
+        options
+      };
+    } catch (error) {
+      console.error(`Error getting custom cocktail product details: `, error);
+      throw new Error("Custom cocktail product details not retrieved");
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const loadProduct = async () => {
       try {
-        const response = await fetch('https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails?siteType=SHP&siteCountry=USA&languageCode=en&preferredCustomerId=9276777&preferredCustomerDiscount=0&markup=0&cocktailType=CC&pageMode=1&templateIdSelected=&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba');
-        const result = await response.json();
-        setData(result);
+        const product = await fetchProductDetails();
+        setCCProductData(product);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error(error);
       }
     };
 
-    fetchData();
+    loadProduct();
   }, []);
 
   return (
     <div className="cc-product">
       product details here: <br/>
-      {/*{data}*/}
+      <div>Product title:
+        <div
+        dangerouslySetInnerHTML={{
+          __html: ccProductData?.title || ""
+        }}
+      /></div>
+      <div>
+        Product description:
+        <div
+          dangerouslySetInnerHTML={{
+            __html: ccProductData?.description || ""
+          }}
+        />
+      </div>
+      <div>Product image: <img alt={"custom cocktail"} src={ccProductData?.imageUrl}/></div>
     </div>
   );
 };

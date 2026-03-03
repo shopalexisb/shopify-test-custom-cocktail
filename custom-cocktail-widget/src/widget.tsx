@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { ProductDetails } from "./product-info/ProductDetails";
-import {AddToCart} from "./product-info/AddToCart";
+import { AddToCart } from "./product-info/AddToCart";
 
 function Widget() {
   return (
