@@ -2,7 +2,15 @@
 
 <div id="cc-widget"></div>
 
-<div><strong>Customer Info: </strong>
+<script type="application/json" id="cc-customer-config">
+  {
+    "pcid": "{{ customer.metafields.custom.pc_id }}"
+  }
+</script>
+
+<button class="js-cc-widget-debug">Show Debug Info </button>
+<div class="js-cc-widget-debug-info cc-widget-debug" style="display: none">
+  <strong>Customer Info: </strong>
 {% if customer %}
   <div><span>customerId: </span>{{ customer.id }}</div>
   <div><span>pcid: </span>{{ customer.metafields.custom.pc_id }}</div>

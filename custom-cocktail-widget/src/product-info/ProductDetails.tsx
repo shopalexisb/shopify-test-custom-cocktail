@@ -19,7 +19,6 @@ export const ProductDetails= () => {
           sku: perm.merchantSKU
         })
       );
-      console.log(JSON.stringify(productResponse));
       return {
         imageUrl: productData.mainImage?.imageUrl,
         title: productData.catalogName,

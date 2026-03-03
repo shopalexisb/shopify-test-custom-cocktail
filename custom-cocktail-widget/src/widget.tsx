@@ -1,25 +1,25 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { createRoot } from "react-dom/client";
 import { ProductDetails } from "./product-info/ProductDetails";
 import { ProductPurchase } from "./product-info/ProductPurchase";
 import "./styles/main.scss"
-
-
-const PROD_VARIANT_CUSTOM_COCKTAIL_30 = 48475839922405;
-const PROD_VARIANT_CUSTOM_COCKTAIL_90 = 48475917615333;
+import { CUSTOM_COCKTAIL_OPTIONS } from "./utils/product-option-util";
+import { initiateDebugListener } from "./utils/debugger";
+import { CustomerConfig } from "./utils/customer-config-util";
 
 function Widget() {
-  const options = [
-    { label: "30 Day Supply", variantId: PROD_VARIANT_CUSTOM_COCKTAIL_30 },
-    { label: "90 Day Supply", variantId: PROD_VARIANT_CUSTOM_COCKTAIL_90 }
-  ];
+  const [pcid, setPcid] = useState("");
+
+  useEffect(() => {
+    initiateDebugListener();
+    setPcid(CustomerConfig.pcid)
+  }, []);
 
   return (
     <div className={"cc-widget-wrapper"}>
       <ProductDetails />
-      <ProductPurchase options={options} />
+      <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} />
     </div>
-
   );
 }
 
