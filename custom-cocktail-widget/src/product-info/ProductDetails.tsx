@@ -47,22 +47,19 @@ export const ProductDetails= () => {
 
   return (
     <div className="cc-product">
-      product details here: <br/>
-      <div>Product title:
-        <div
-        dangerouslySetInnerHTML={{
-          __html: ccProductData?.title || ""
-        }}
-      /></div>
-      <div>
-        Product description:
-        <div
-          dangerouslySetInnerHTML={{
-            __html: ccProductData?.description || ""
-          }}
+      <div className="cc-product__title"
+           dangerouslySetInnerHTML={{
+             __html: ccProductData?.title || ""
+           }}
+      />
+      <div className="cc-product-wrapper">
+        <img className="cc-product__img" alt={"custom cocktail"} src={ccProductData?.imageUrl}/>
+        <div className="cc-product__description"
+             dangerouslySetInnerHTML={{
+               __html: ccProductData?.description || ""
+             }}
         />
       </div>
-      <div>Product image: <img alt={"custom cocktail"} src={ccProductData?.imageUrl}/></div>
     </div>
   );
 };

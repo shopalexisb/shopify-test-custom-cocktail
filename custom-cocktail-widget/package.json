@@ -14,5 +14,8 @@
     "react-dom": "^19.2.4",
     "vite": "^7.3.1"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "sass-embedded": "^1.97.3"
+  }
 }

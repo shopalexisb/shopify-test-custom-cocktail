@@ -37,7 +37,7 @@ export const AddToCart: React.FC<IAddToCart> = ({
   };
 
   return (
-    <button onClick={doAddToCart}>
+    <button className={"cc-product__add-to-cart-btn"} onClick={doAddToCart}>
       Add to Cart
     </button>
   );

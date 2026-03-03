@@ -2923,7 +2923,7 @@ type HasTagResponse {
 Represents a unique identifier, often used to refetch an object.
 The ID type appears in a JSON response as a String, but it is not intended to be human-readable.
 
-Example value: `"gid://shopify/Product/10079785100"`
+Example value: `"gid://shopify/CustomProduct/10079785100"`
 """
 scalar ID
 
@@ -2983,7 +2983,7 @@ A [JSON](https://www.json.org/json-en.html) object.
 Example value:
 `{
   "product": {
-    "id": "gid://shopify/Product/1346443542550",
+    "id": "gid://shopify/CustomProduct/1346443542550",
     "title": "White T-shirt",
     "options": [{
       "name": "Size",
@@ -4458,7 +4458,7 @@ type Product implements HasMetafields {
   ): Metafield
 
   """
-  A custom category for a product. Product types allow merchants to define categories other than the
+  A custom category for a product. CustomProduct types allow merchants to define categories other than the
   ones available in Shopify's
   [standard product categories](https://help.shopify.com/manual/products/details/product-type).
   """

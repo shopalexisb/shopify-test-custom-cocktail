@@ -1,6 +1,6 @@
-<div>This is liquid template</div>
-
 <script src="{{ 'widget.js' | asset_url }}" defer></script>
+
+<div id="cc-widget"></div>
 
 <div><strong>Customer Info: </strong>
 {% if customer %}
@@ -8,9 +8,6 @@
   <div><span>pcid: </span>{{ customer.metafields.custom.pc_id }}</div>
 {% endif %}
 </div>
-
-<div id="cc-widget"></div>
-
 
 {% schema %}
 {

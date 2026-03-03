@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { ProductDetails } from "./product-info/ProductDetails";
 import { ProductPurchase } from "./product-info/ProductPurchase";
+import "./styles/main.scss"
 
 
 const PROD_VARIANT_CUSTOM_COCKTAIL_30 = 48475839922405;
@@ -14,7 +15,7 @@ function Widget() {
   ];
 
   return (
-    <div>
+    <div className={"cc-widget-wrapper"}>
       <ProductDetails />
       <ProductPurchase options={options} />
     </div>

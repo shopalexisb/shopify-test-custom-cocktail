@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ProductOptionDropDown } from "./ProductOptionDropDown";
+import { ProductOptionPills } from "./ProductOptionPills";
 import { AddToCart } from "./AddToCart";
 
 interface ProductOption {
@@ -19,8 +19,8 @@ export const ProductPurchase: React.FC<ProductPurchaseProps> = ({
   );
 
   return (
-    <div>
-      <ProductOptionDropDown
+    <div className={"cc-product__purchase"}>
+      <ProductOptionPills
         options={options}
         selectedOption={selectedVariant}
         onChange={setSelectedVariant}
