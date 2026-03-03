@@ -2,12 +2,10 @@ import React from "react";
 
 interface IAddToCart {
   variantId: number;
-  buttonText: string;
 }
 
 export const AddToCart: React.FC<IAddToCart> = ({
-  variantId,
-  buttonText
+  variantId
 }) => {
 
   const doAddToCart = async () => {
@@ -40,7 +38,7 @@ export const AddToCart: React.FC<IAddToCart> = ({
 
   return (
     <button onClick={doAddToCart}>
-      {buttonText}
+      Add to Cart
     </button>
   );
 };
