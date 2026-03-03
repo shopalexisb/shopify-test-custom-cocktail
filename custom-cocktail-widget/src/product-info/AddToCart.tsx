@@ -1,6 +1,14 @@
 import React from "react";
 
-export const AddToCart= () => {
+interface IAddToCart {
+  variantId: number;
+  buttonText: string;
+}
+
+export const AddToCart: React.FC<IAddToCart> = ({
+  variantId,
+  buttonText
+}) => {
 
   const doAddToCart = async () => {
     try {
@@ -10,9 +18,7 @@ export const AddToCart= () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: 48475839922405,
-          //48475839922405 30 day serving
-          //48475917615333 90 day serving
+          id: variantId,
           quantity: 1,
           properties: {
             formula: "123_ABCDE",
@@ -34,7 +40,7 @@ export const AddToCart= () => {
 
   return (
     <button onClick={doAddToCart}>
-      Add to Cart
+      {buttonText}
     </button>
   );
 };
