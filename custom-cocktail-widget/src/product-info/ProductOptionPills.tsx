@@ -2,13 +2,13 @@ import React from "react";
 
 interface IProductOption {
   label: string;
-  variantId: number;
+  variantId: string;
 }
 
 interface IPillOptions {
   options: IProductOption[];
-  selectedOption: number;
-  onChange: (variantId: number) => void;
+  selectedOption: string;
+  onChange: (variantId: string) => void;
 }
 
 export const ProductOptionPills: React.FC<IPillOptions> = ({

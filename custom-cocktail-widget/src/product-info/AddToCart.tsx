@@ -1,7 +1,7 @@
 import React from "react";
 
 interface IAddToCart {
-  variantId: number;
+  variantId: string;
 }
 
 export const AddToCart: React.FC<IAddToCart> = ({
