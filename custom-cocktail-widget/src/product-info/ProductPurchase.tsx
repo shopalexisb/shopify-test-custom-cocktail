@@ -5,6 +5,7 @@ import { PricingMap, ServingSize } from "./CustomPrice";
 import { getOptionByVariantId } from "../utils/product-option-util";
 import { Site } from "../Site";
 import { getFormattedPrice } from "../utils/currency-formatter-util";
+import { fetchCustomCocktailCost, fetchCustomCocktailForCustomer } from "../api/CustomCocktail";
 
 interface ProductOption {
   label: string;
@@ -23,42 +24,25 @@ export const ProductPurchase: React.FC<ProductPurchaseProps> = ({
   const [selectedVariant, setSelectedVariant] = useState<string>(
     options[0].variantId
   );
+  const [currentFormula, setCurrentFormula] = useState("");
 
   const [customPricing, setCustomPricing] = useState<PricingMap>();
 
   useEffect(() => {
     if(pcid){
-      fetchCustomPrice().then(result => {
-        setCustomPricing(result)
+      fetchCustomCocktailForCustomer(pcid).then(result => {
+        setCurrentFormula(result.labelCode);
       });
     }
   }, [pcid]);
 
-  const fetchCustomPrice = async (
-  ): Promise<PricingMap> => {
-    try {
-      const priceResponse = await fetch(`https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails?siteType=SHP&siteCountry=USA&languageCode=en&preferredCustomerId=${pcid}&cocktailType=CC&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba`);
-      const result = await priceResponse.json();
-      console.log("price results: " + JSON.stringify(result));
-      const pricingMap = {} as PricingMap;
-      pricingMap[30] = {
-        regularPrice: result.cocktail.price30.price,
-        salePrice: result.cocktail.price30.price,
-        cashback: result.cocktail.price30.cashbackAmount,
-        isOnSale: result.cocktail.fullPrice.isSaleOn
-      };
-      pricingMap[90] = {
-        regularPrice: result.cocktail.price.price,
-        salePrice: result.cocktail.price.price,
-        cashback: result.cocktail.price.cashbackAmount,
-        isOnSale: result.cocktail.fullPrice.isSaleOn
-      };
-      return pricingMap;
-    } catch (error) {
-      console.error(`Error getting custom cocktail cost: `, error);
-      throw new Error("Custom cocktail cost not retrieved");
+  useEffect(() => {
+    if(currentFormula.length){
+      fetchCustomCocktailCost(pcid, currentFormula).then(result => {
+        setCustomPricing(result)
+      });
     }
-  };
+  }, [currentFormula]);
 
   const option = selectedVariant
     ? getOptionByVariantId(selectedVariant)
