@@ -1,0 +1,13 @@
+{% comment %}
+  This is a reusable template used to access siteId by market
+  siteId mappings are configured in meta object: Market Site Mapping
+{% endcomment %}
+{% assign market_site_id = 260 %}
+{% for map in shop.metaobjects.market_site_mapping.values %}
+  {% if map.market_handle == localization.market.handle %}
+    {% assign market_site_id = map.site_id %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{{ market_site_id }}

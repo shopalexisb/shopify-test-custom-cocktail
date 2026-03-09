@@ -8,6 +8,18 @@
   }
 </script>
 
+{%- capture market_id_raw -%}{%- render 'market_site' -%}{%- endcapture -%}
+{%- assign market_id_clean = market_id_raw | strip_html | strip -%}
+
+<script type="application/json" id="market-config">
+  {
+    "siteId": "{{ market_id_clean }}",
+    "market": "{{ localization.market.handle }}",
+    "country": "{{ localization.country.iso_code }}",
+    "language": "{{ localization.language.iso_code }}"
+  }
+</script>
+
 <button class="js-cc-widget-debug">Show Debug Info </button>
 <div class="js-cc-widget-debug-info cc-widget-debug" style="display: none">
   <strong>Customer Info: </strong>

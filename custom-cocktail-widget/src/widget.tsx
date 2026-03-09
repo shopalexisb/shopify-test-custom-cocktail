@@ -6,19 +6,25 @@ import "./styles/main.scss"
 import { CUSTOM_COCKTAIL_OPTIONS } from "./utils/product-option-util";
 import { initiateDebugListener } from "./utils/debugger";
 import { CustomerConfig } from "./utils/customer-config-util";
+import { MarketConfig } from "./utils/market-config-util";
+import { siteApiData } from "./siteAtom";
+import { useAtom } from "jotai";
 
 function Widget() {
   const [pcid, setPcid] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const [siteData] = useAtom(siteApiData(siteId));
 
   useEffect(() => {
     initiateDebugListener();
     setPcid(CustomerConfig.pcid)
+    setSiteId(MarketConfig.siteId)
   }, []);
 
   return (
     <div className={"cc-widget-wrapper"}>
       <ProductDetails />
-      <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} />
+      <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} />
     </div>
   );
 }
