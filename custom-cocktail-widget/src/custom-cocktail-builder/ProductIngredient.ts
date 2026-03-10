@@ -4,4 +4,5 @@ export interface ProductIngredient {
   maxDoses: number;
   letter: string;
   maId: string;
+  dosesSelected?: number;
 }

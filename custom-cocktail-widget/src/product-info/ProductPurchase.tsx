@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { ProductOptionPills } from "./ProductOptionPills";
 import { AddToCart } from "./AddToCart";
 import { PricingMap, ServingSize } from "./CustomPrice";
 import { getOptionByVariantId } from "../utils/product-option-util";
 import { Site } from "../Site";
 import { getFormattedPrice } from "../utils/currency-formatter-util";
-import { fetchCustomCocktailCost, fetchCustomCocktailForCustomer } from "../api/CustomCocktail";
-import { CustomCocktailData } from "../custom-cocktail-builder/CustomCocktailData";
+import { fetchCustomCocktailCost } from "../api/CustomCocktail";
 
 interface ProductOption {
   label: string;
@@ -17,36 +16,25 @@ interface ProductPurchaseProps {
   options: ProductOption[];
   pcid: string;
   siteData: Site;
+  formula: string;
 }
 
 export const ProductPurchase: React.FC<ProductPurchaseProps> = ({
-                                                                  options, pcid, siteData
+                                                                  options, pcid, siteData, formula
                                                                 }) => {
   const [selectedVariant, setSelectedVariant] = useState<string>(
     options[0].variantId
   );
-  const [currentFormula, setCurrentFormula] = useState("");
 
   const [customPricing, setCustomPricing] = useState<PricingMap>();
 
-  const [ccData, setCCData] = useState<CustomCocktailData>();
-
   useEffect(() => {
-    if(pcid){
-      fetchCustomCocktailForCustomer(pcid).then(result => {
-        setCCData(result);
-        setCurrentFormula(result.currentFormula);
-      });
-    }
-  }, [pcid]);
-
-  useEffect(() => {
-    if(currentFormula.length){
-      fetchCustomCocktailCost(pcid, currentFormula).then(result => {
+    if(formula.length){
+      fetchCustomCocktailCost(pcid, formula).then(result => {
         setCustomPricing(result)
       });
     }
-  }, [currentFormula]);
+  }, [formula]);
 
   const option = selectedVariant
     ? getOptionByVariantId(selectedVariant)

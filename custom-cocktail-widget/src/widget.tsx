@@ -10,11 +10,19 @@ import { MarketConfig } from "./utils/market-config-util";
 import { siteApiData } from "./siteAtom";
 import { useAtom } from "jotai";
 import { CocktailBuilder } from "./custom-cocktail-builder/CocktailBuilder";
+import { fetchCustomCocktailForCustomer } from "./api/CustomCocktail";
+import { CustomCocktailData } from "./custom-cocktail-builder/CustomCocktailData";
 
 function Widget() {
   const [pcid, setPcid] = useState("");
   const [siteId, setSiteId] = useState("");
   const [siteData] = useAtom(siteApiData(siteId));
+
+  const [ccData, setCCData] = useState<CustomCocktailData>({
+    currentFormula: "",
+    prodIngredients: []
+  });
+  const [currentFormula, setCurrentFormula] = useState("");
 
   useEffect(() => {
     initiateDebugListener();
@@ -22,11 +30,24 @@ function Widget() {
     setSiteId(MarketConfig.siteId)
   }, []);
 
+  useEffect(() => {
+    if(pcid){
+      fetchCustomCocktailForCustomer(pcid).then(result => {
+        setCCData(result);
+        setCurrentFormula(result.currentFormula);
+      });
+    }
+  }, [pcid]);
+
+  useEffect(() => {
+    console.log("currentFormula change");
+  }, [currentFormula]);
+
   return (
     <div className={"cc-widget-wrapper"}>
       <ProductDetails />
-      <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} />
-      <CocktailBuilder pcid={pcid} siteData={siteData}/>
+      <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} formula={currentFormula} />
+      <CocktailBuilder pcid={pcid} siteData={siteData} ccData={ccData}/>
     </div>
   );
 }

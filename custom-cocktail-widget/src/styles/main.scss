@@ -72,4 +72,34 @@
   &__title {
     font-weight: bold;
   }
+  &__prod {
+    max-width: 250px;
+    &-img {
+      max-width: 200px;
+    }
+    &-letter {
+      display: none;
+    }
+  }
+  &__prod-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  &__prod-action-btn {
+    background-color: #fff;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: default;
+    float: left;
+    height: 24px;
+    width: 24px;
+
+    &--subtract {
+      background-image: url(https://img.mashop.com/Image/resources/images/icon-minus-shop-blue-sm.svg);
+    }
+    &--add {
+      background-image: url(https://img.mashop.com/Image/resources/images/icon-plus-shop-blue-sm.svg);
+    }
+  }
 }
