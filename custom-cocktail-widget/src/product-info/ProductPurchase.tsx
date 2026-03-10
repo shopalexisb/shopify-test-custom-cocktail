@@ -6,6 +6,7 @@ import { getOptionByVariantId } from "../utils/product-option-util";
 import { Site } from "../Site";
 import { getFormattedPrice } from "../utils/currency-formatter-util";
 import { fetchCustomCocktailCost, fetchCustomCocktailForCustomer } from "../api/CustomCocktail";
+import { CustomCocktailData } from "../custom-cocktail-builder/CustomCocktailData";
 
 interface ProductOption {
   label: string;
@@ -28,10 +29,13 @@ export const ProductPurchase: React.FC<ProductPurchaseProps> = ({
 
   const [customPricing, setCustomPricing] = useState<PricingMap>();
 
+  const [ccData, setCCData] = useState<CustomCocktailData>();
+
   useEffect(() => {
     if(pcid){
       fetchCustomCocktailForCustomer(pcid).then(result => {
-        setCurrentFormula(result.labelCode);
+        setCCData(result);
+        setCurrentFormula(result.currentFormula);
       });
     }
   }, [pcid]);

@@ -1,15 +1,33 @@
 import { PricingMap } from "../product-info/CustomPrice";
+import { CustomCocktailData } from "../custom-cocktail-builder/CustomCocktailData";
+import { RawCustomCocktailData } from "./RawCustomCocktailData";
 
 export const fetchCustomCocktailForCustomer = async (
   pcid: string
-): Promise<any> => {
+): Promise<CustomCocktailData> => {
   try {
+    let ccData: CustomCocktailData = {
+      currentFormula: "",
+      prodIngredients: []
+    };
     if(pcid.length){
       const ccCustomerResponse = await fetch(`https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails?siteType=SHP&siteCountry=USA&languageCode=en&preferredCustomerId=${pcid}&cocktailType=CC&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba`);
-      return ccCustomerResponse.json();
+      const returnData = await ccCustomerResponse.json();
+      ccData.currentFormula = returnData.labelCode;
+      ccData.prodIngredients = returnData.cocktail["product"].map((item: RawCustomCocktailData) => {
+        return {
+          name: item.name,
+          imageUrl: `https://img.shop.com/th.aspx?id=${item.maId}&size=300`,
+          maxDoses: item.dosesAllowed,
+          letter: item.letter,
+          maId: item.maId
+        };
+      });
     }
+    return ccData;
   } catch (error) {
     console.error(`Error getting custom cocktail info for pcid: ${pcid}`, error);
+    throw new Error("Custom cocktail info not retrieved");
   }
 };
 
@@ -45,13 +63,13 @@ export const fetchCustomCocktailCost = async (
       regularPrice: result.fullCost.fullRetailCost30,
       salePrice: result.cost30.retailCost,
       cashback: result.cost30.cashbackAmount,
-      isOnSale: result.fullCost.isSaleOn
+      isOnSale: Boolean(result.fullCost.isSaleOn)
     };
     pricingMap[90] = {
       regularPrice: result.fullCost.fullRetailCost,
       salePrice: result.cost.retailCost,
       cashback: result.cost.cashbackAmount,
-      isOnSale: result.fullCost.isSaleOn
+      isOnSale: Boolean(result.fullCost.isSaleOn)
     };
     return pricingMap;
   } catch (error) {

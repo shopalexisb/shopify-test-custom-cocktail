@@ -9,6 +9,7 @@ import { CustomerConfig } from "./utils/customer-config-util";
 import { MarketConfig } from "./utils/market-config-util";
 import { siteApiData } from "./siteAtom";
 import { useAtom } from "jotai";
+import { CocktailBuilder } from "./custom-cocktail-builder/CocktailBuilder";
 
 function Widget() {
   const [pcid, setPcid] = useState("");
@@ -25,6 +26,7 @@ function Widget() {
     <div className={"cc-widget-wrapper"}>
       <ProductDetails />
       <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} />
+      <CocktailBuilder pcid={pcid} siteData={siteData}/>
     </div>
   );
 }
