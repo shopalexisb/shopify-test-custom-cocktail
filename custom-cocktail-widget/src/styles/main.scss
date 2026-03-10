@@ -118,5 +118,8 @@
     &--add {
       background-image: url(https://img.mashop.com/Image/resources/images/icon-plus-shop-blue-sm.svg);
     }
+    &--disabled {
+      opacity: 0.2;
+    }
   }
 }
