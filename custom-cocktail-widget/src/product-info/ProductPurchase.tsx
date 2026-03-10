@@ -65,7 +65,7 @@ export const ProductPurchase: React.FC<ProductPurchaseProps> = ({
         onChange={setSelectedVariant}
       />
       <div className={"cc-product__price"}>{productPrice}{isOnSale && <span className={"cc-product__price--sale"}>{getFormattedPrice(siteData, regularPrice)}</span>}</div>
-      <AddToCart variantId={selectedVariant} />
+      <AddToCart variantId={selectedVariant} formula={formula} price={rawPrice} />
     </div>
   );
 };

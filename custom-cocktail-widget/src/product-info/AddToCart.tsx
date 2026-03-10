@@ -2,13 +2,20 @@ import React from "react";
 
 interface IAddToCart {
   variantId: string;
+  price?: string | null;
+  formula?: string;
 }
 
 export const AddToCart: React.FC<IAddToCart> = ({
-  variantId
+  variantId, price, formula
 }) => {
 
   const doAddToCart = async () => {
+    if(!price){
+      console.error("price is undefined for custom cocktail");
+      return;
+    }
+
     try {
       const response = await fetch('/cart/add.js', {
         method: 'POST',
@@ -19,8 +26,8 @@ export const AddToCart: React.FC<IAddToCart> = ({
           id: variantId,
           quantity: 1,
           properties: {
-            formula: "123_ABCDE",
-            _computedPrice: "155.99" //price override
+            formula: formula,
+            _computedPrice: price //price override
           }
         }),
       });

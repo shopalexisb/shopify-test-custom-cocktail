@@ -1,16 +1,13 @@
-import React, {useEffect, useState} from "react";
-import { Site } from "../Site";
+import React from "react";
 import { CustomCocktailData } from "./CustomCocktailData";
 import {CocktailBuilderProdIngredient} from "./CocktailBuilderProdIngredient";
 
 interface ProductPurchaseProps {
-  pcid: string;
-  siteData: Site;
   ccData: CustomCocktailData;
 }
 
 export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
-                                                                  pcid, siteData, ccData
+                                                                  ccData
                                                                 }) => {
 
   return (
