@@ -30,3 +30,15 @@ export const getImageUrlFromMAID = (maId: string): string => {
     return `https://img.mashop.com/Image/customcocktail/product_images/${maId}.jpg`
   }
 };
+
+export const getDosePerIngredient = (formula: string, letter: string): number => {
+  let count = 0;
+
+  for (const char of formula) {
+    if (char === letter) {
+      count++;
+    }
+  }
+
+  return count;
+};

@@ -73,12 +73,29 @@
     font-weight: bold;
   }
   &__prod {
-    max-width: 250px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    box-shadow: 0 0 5px 1px #dadbe6;
+    padding: 10px;
+
+    &-title {
+      font-weight: bold;
+      font-size: 14px;
+    }
     &-img {
-      max-width: 200px;
+      width: 200px;
     }
     &-letter {
       display: none;
+    }
+    &-action {
+      display: flex;
+      gap: 20px;
     }
   }
   &__prod-wrapper{
@@ -90,7 +107,7 @@
     background-color: #fff;
     background-repeat: no-repeat;
     border: none;
-    cursor: default;
+    cursor: pointer;
     float: left;
     height: 24px;
     width: 24px;

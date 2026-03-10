@@ -1,7 +1,7 @@
 import { PricingMap } from "../product-info/CustomPrice";
 import { CustomCocktailData } from "../custom-cocktail-builder/CustomCocktailData";
 import { RawCustomCocktailData } from "./RawCustomCocktailData";
-import {getImageUrlFromMAID} from "../utils/cocktail-ingredient-util";
+import {getDosePerIngredient, getImageUrlFromMAID} from "../utils/cocktail-ingredient-util";
 
 export const fetchCustomCocktailForCustomer = async (
   pcid: string
@@ -21,7 +21,8 @@ export const fetchCustomCocktailForCustomer = async (
           imageUrl: getImageUrlFromMAID(item.maId),
           maxDoses: item.dosesAllowed,
           letter: item.letter,
-          maId: item.maId
+          maId: item.maId,
+          dosesSelected: getDosePerIngredient(ccData.currentFormula, item.letter)
         };
       });
     }
