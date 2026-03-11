@@ -22,7 +22,6 @@ function Widget() {
     currentFormula: "",
     prodIngredients: []
   });
-  const [currentFormula, setCurrentFormula] = useState("");
 
   useEffect(() => {
     initiateDebugListener();
@@ -34,19 +33,14 @@ function Widget() {
     if(pcid){
       fetchCustomCocktailForCustomer(pcid).then(result => {
         setCCData(result);
-        setCurrentFormula(result.currentFormula);
       });
     }
   }, [pcid]);
 
-  useEffect(() => {
-    console.log("currentFormula change");
-  }, [currentFormula]);
-
   return (
     <div className={"cc-widget-wrapper"}>
       <ProductDetails />
-      <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} formula={currentFormula} />
+      <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} formula={ccData.currentFormula} />
       <CocktailBuilder ccData={ccData} setCCData={setCCData}/>
     </div>
   );

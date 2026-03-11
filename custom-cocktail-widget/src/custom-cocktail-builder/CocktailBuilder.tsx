@@ -33,13 +33,19 @@ export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
     setCCData(updatedCCData);
   };
 
+  const isMaxedOutDoses = () => {
+    const MAX_DOSES = 10;
+    const dosesSelected = ccData.prodIngredients.reduce((sum, i) => sum + (i.dosesSelected ?? 0), 0);
+    return dosesSelected >= MAX_DOSES;
+  }
+
   return (
     <div className={"cc-builder"}>
       <div className={"cc-builder__title"}>Select Ingredients to Build Your Custom Cocktail</div>
       <div>current formula: {ccData.currentFormula}</div>
       <div className={"cc-builder__prod-wrapper"}>
         {ccData.prodIngredients.map((prod) => (
-          <CocktailBuilderProdIngredient prodIngredient={prod} onAddDose={handleFormulaUpdate} onSubtractDose={handleFormulaUpdate} />
+          <CocktailBuilderProdIngredient prodIngredient={prod} onAddDose={handleFormulaUpdate} onSubtractDose={handleFormulaUpdate} isMaxedOutDoses={isMaxedOutDoses()} />
         ))}
       </div>
     </div>

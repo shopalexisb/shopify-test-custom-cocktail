@@ -5,10 +5,11 @@ interface ProductPurchaseProps {
   prodIngredient: ProductIngredient;
   onAddDose: (letter: string, actionType: string) => void;
   onSubtractDose: (letter: string, actionType: string) => void;
+  isMaxedOutDoses: boolean;
 }
 
 export const CocktailBuilderProdIngredient: React.FC<ProductPurchaseProps> = ({
-                                                                  prodIngredient, onAddDose, onSubtractDose
+                                                                  prodIngredient, onAddDose, onSubtractDose, isMaxedOutDoses
                                                                 }) => {
 
   return (
@@ -23,8 +24,8 @@ export const CocktailBuilderProdIngredient: React.FC<ProductPurchaseProps> = ({
         />
         <div className={"cc-builder__prod-count"}>{prodIngredient.dosesSelected}</div>
         <button onClick={() => onAddDose(prodIngredient.letter, "add")}
-                disabled={prodIngredient.dosesSelected === prodIngredient.maxDoses}
-                className={`cc-builder__prod-action-btn cc-builder__prod-action-btn--add ${prodIngredient.dosesSelected === prodIngredient.maxDoses ? 'cc-builder__prod-action-btn--disabled' : ''}`}
+                disabled={prodIngredient.dosesSelected === prodIngredient.maxDoses || isMaxedOutDoses}
+                className={`cc-builder__prod-action-btn cc-builder__prod-action-btn--add ${prodIngredient.dosesSelected === prodIngredient.maxDoses || isMaxedOutDoses ? 'cc-builder__prod-action-btn--disabled' : ''}`}
         />
       </div>
     </div>
