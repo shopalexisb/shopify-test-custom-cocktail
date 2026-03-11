@@ -1,14 +1,37 @@
 import React from "react";
 import { CustomCocktailData } from "./CustomCocktailData";
-import {CocktailBuilderProdIngredient} from "./CocktailBuilderProdIngredient";
+import { CocktailBuilderProdIngredient } from "./CocktailBuilderProdIngredient";
+import {
+  addIngredientToFormula,
+  subtractIngredientToFormula
+} from "../utils/cocktail-formula-util";
+import { getDosePerIngredient } from "../utils/cocktail-ingredient-util";
 
 interface ProductPurchaseProps {
   ccData: CustomCocktailData;
+  setCCData: React.Dispatch<React.SetStateAction<CustomCocktailData>>;
 }
 
 export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
-                                                                  ccData
+                                                                  ccData, setCCData
                                                                 }) => {
+
+  const handleFormulaUpdate = (ingredientLetter: string, actionType: string) => {
+    let updatedFormula;
+    if(actionType === "add"){
+      updatedFormula = addIngredientToFormula(ccData.currentFormula, ingredientLetter);
+    } else {
+      updatedFormula = subtractIngredientToFormula(ccData.currentFormula, ingredientLetter);
+    }
+    const updatedCCData = {
+      currentFormula: updatedFormula,
+      prodIngredients: ccData.prodIngredients.map(item => ({
+        ...item,
+        dosesSelected: getDosePerIngredient(updatedFormula, item.letter)
+      }))
+    }
+    setCCData(updatedCCData);
+  };
 
   return (
     <div className={"cc-builder"}>
@@ -16,7 +39,7 @@ export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
       <div>current formula: {ccData.currentFormula}</div>
       <div className={"cc-builder__prod-wrapper"}>
         {ccData.prodIngredients.map((prod) => (
-          <CocktailBuilderProdIngredient prodIngredient={prod} />
+          <CocktailBuilderProdIngredient prodIngredient={prod} onAddDose={handleFormulaUpdate} onSubtractDose={handleFormulaUpdate} />
         ))}
       </div>
     </div>

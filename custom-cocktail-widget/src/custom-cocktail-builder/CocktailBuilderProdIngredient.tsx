@@ -3,10 +3,12 @@ import { ProductIngredient } from "./ProductIngredient";
 
 interface ProductPurchaseProps {
   prodIngredient: ProductIngredient;
+  onAddDose: (letter: string, actionType: string) => void;
+  onSubtractDose: (letter: string, actionType: string) => void;
 }
 
 export const CocktailBuilderProdIngredient: React.FC<ProductPurchaseProps> = ({
-                                                                  prodIngredient
+                                                                  prodIngredient, onAddDose, onSubtractDose
                                                                 }) => {
 
   return (
@@ -15,11 +17,16 @@ export const CocktailBuilderProdIngredient: React.FC<ProductPurchaseProps> = ({
       <img className={"cc-builder__prod-img"} alt={prodIngredient.name} src={prodIngredient.imageUrl} />
       <div className={"cc-builder__prod-letter"}>{prodIngredient.letter}</div>
       <div className={"cc-builder__prod-action"}>
-        <button className={`cc-builder__prod-action-btn cc-builder__prod-action-btn--subtract ${prodIngredient.dosesSelected === 0 ? 'cc-builder__prod-action-btn--disabled' : ''}`}/>
+        <button onClick={() => onSubtractDose(prodIngredient.letter, "subtract")}
+                disabled={prodIngredient.dosesSelected === 0}
+                className={`cc-builder__prod-action-btn cc-builder__prod-action-btn--subtract ${prodIngredient.dosesSelected === 0 ? 'cc-builder__prod-action-btn--disabled' : ''}`}
+        />
         <div className={"cc-builder__prod-count"}>{prodIngredient.dosesSelected}</div>
-        <button className={`cc-builder__prod-action-btn cc-builder__prod-action-btn--add ${prodIngredient.dosesSelected === prodIngredient.maxDoses ? 'cc-builder__prod-action-btn--disabled' : ''}`}/>
+        <button onClick={() => onAddDose(prodIngredient.letter, "add")}
+                disabled={prodIngredient.dosesSelected === prodIngredient.maxDoses}
+                className={`cc-builder__prod-action-btn cc-builder__prod-action-btn--add ${prodIngredient.dosesSelected === prodIngredient.maxDoses ? 'cc-builder__prod-action-btn--disabled' : ''}`}
+        />
       </div>
-      <div></div>
     </div>
   );
 };

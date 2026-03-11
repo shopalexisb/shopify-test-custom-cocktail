@@ -47,7 +47,7 @@ function Widget() {
     <div className={"cc-widget-wrapper"}>
       <ProductDetails />
       <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} formula={currentFormula} />
-      <CocktailBuilder pcid={pcid} siteData={siteData} ccData={ccData}/>
+      <CocktailBuilder ccData={ccData} setCCData={setCCData}/>
     </div>
   );
 }

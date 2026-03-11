@@ -1,7 +1,9 @@
 import { PricingMap } from "../product-info/CustomPrice";
 import { CustomCocktailData } from "../custom-cocktail-builder/CustomCocktailData";
 import { RawCustomCocktailData } from "./RawCustomCocktailData";
-import {getDosePerIngredient, getImageUrlFromMAID} from "../utils/cocktail-ingredient-util";
+import { getDosePerIngredient, getImageUrlFromMAID } from "../utils/cocktail-ingredient-util";
+import * as he from 'he';
+import { getFormulaMapFromFormulaString } from "../utils/cocktail-formula-util";
 
 export const fetchCustomCocktailForCustomer = async (
   pcid: string
@@ -17,7 +19,7 @@ export const fetchCustomCocktailForCustomer = async (
       ccData.currentFormula = returnData.labelCode;
       ccData.prodIngredients = returnData.cocktail["product"].map((item: RawCustomCocktailData) => {
         return {
-          name: item.name,
+          name: he.decode(item.name),
           imageUrl: getImageUrlFromMAID(item.maId),
           maxDoses: item.dosesAllowed,
           letter: item.letter,
@@ -39,10 +41,6 @@ export const fetchCustomCocktailCost = async (
 ): Promise<PricingMap> => {
   try {
     const baseUrl = "https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails/costs";
-    const formulaMap: Record<string, number> = [...formula].reduce((acc, char) => {
-      acc[char] = (acc[char] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
 
     const params = new URLSearchParams({
       siteType: "SHP",
@@ -53,7 +51,7 @@ export const fetchCustomCocktailCost = async (
       merchantCountry: "USA"
     });
 
-    for (const [id, dose] of Object.entries(formulaMap)) {
+    for (const [id, dose] of Object.entries(getFormulaMapFromFormulaString(formula))) {
       params.append("isoProductIds", id);
       params.append("isoDoses", dose.toString());
     }
