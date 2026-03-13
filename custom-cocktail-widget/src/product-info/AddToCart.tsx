@@ -10,38 +10,60 @@ export const AddToCart: React.FC<IAddToCart> = ({
   variantId, price, formula
 }) => {
 
-  const doAddToCart = async () => {
-    if(!price){
-      console.error("price is undefined for custom cocktail");
-      return;
-    }
-
-    try {
-      const response = await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+  async function doAddToCart() {
+    const res = await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: variantId,
+        quantity: 1,
+        properties: {
+          formula: formula,
+          _computedPrice: price
         },
-        body: JSON.stringify({
-          id: variantId,
-          quantity: 1,
-          properties: {
-            formula: formula,
-            _computedPrice: price //price override
-          }
-        }),
-      });
+        sections: ['cart-drawer', 'cart-icon-bubble'],
+        sections_url: window.location.pathname
+      })
+    });
 
-      if (response.ok) {
-        //TODO: refresh the cart
-        //Open the cart drawer
-        document.querySelector<HTMLElement>('[href="/cart"]')?.click();
+    const data = await res.json();
+    const parser = new DOMParser();
+
+    // Update drawer section
+    if (data.sections?.['cart-drawer']) {
+      const doc = parser.parseFromString(data.sections['cart-drawer'], 'text/html');
+      const newInner = doc.querySelector('#CartDrawer')?.innerHTML;
+
+      const current = document.querySelector('#CartDrawer');
+
+      if (current && newInner) {
+        current.innerHTML = newInner;
       }
-
-    } catch (error) {
-      console.error('Error adding custom cocktail to cart:', error);
     }
-  };
+
+    // Update cart icon bubble
+    if (data.sections['cart-icon-bubble']) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data.sections['cart-icon-bubble'], "text/html");
+
+      const newBubble = doc.querySelector('[id="shopify-section-cart-icon-bubble"]');
+      const currentBubble = document.querySelector('.cart-count-bubble, .cart-count, #cart-icon-bubble');
+
+      if (newBubble && currentBubble) {
+        currentBubble.innerHTML = newBubble.innerHTML;
+      }
+    }
+
+    // Open drawer AFTER content exists
+    const drawer = document.querySelector('cart-drawer');
+
+    if (drawer) {
+      drawer.classList.remove('is-empty');
+
+      // @ts-ignore
+      drawer.open();
+    }
+  }
 
   return (
     <button className={"cc-product__add-to-cart-btn"} onClick={doAddToCart}>
