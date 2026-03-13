@@ -24,6 +24,7 @@ export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
       updatedFormula = subtractIngredientToFormula(ccData.currentFormula, ingredientLetter);
     }
     const updatedCCData = {
+      ...ccData,
       currentFormula: updatedFormula,
       prodIngredients: ccData.prodIngredients.map(item => ({
         ...item,
