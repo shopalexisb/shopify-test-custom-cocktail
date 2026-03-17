@@ -4,32 +4,38 @@ import { CustomCocktailTemplate } from "../custom-cocktail-builder/CustomCocktai
 interface ICustomerCocktails {
   savedCocktails?: CustomCocktailTemplate[];
   selectedTemplate: string;
+  onSelect: (templateId: string) => void;
 }
 
 export const CustomerCocktails: React.FC<ICustomerCocktails> = ({
-                                                                  savedCocktails, selectedTemplate
+                                                                  savedCocktails, selectedTemplate, onSelect
                                                            }) => {
+
   const hasSavedCocktails = savedCocktails && savedCocktails.length > 0;
-  const selectedCocktail = savedCocktails?.find((c) => c.id === selectedTemplate);
 
   return (
     <div className="cc-saved-cocktails">
-      {selectedTemplate.length > 0 && savedCocktails && (
-        <div>Selected Cocktail: {selectedCocktail?.name}</div>
+      {hasSavedCocktails && (
+        <div>Choose a Saved Custom Cocktail:</div>
       )}
-      <div className="cc-product__pill-container">
+      <div className="cc-saved-cocktails__list">
         {hasSavedCocktails ? (
           savedCocktails.map((opt) => {
             const isSelected = opt.id === selectedTemplate;
 
             return (
-              <button
+              <label
                 key={opt.id}
-                type="button"
-                className={`cc-product__pill ${isSelected ? "cc-product__pill--active" : ""}`}
               >
+                <input
+                  type="radio"
+                  name="saved-cocktail-selection"
+                  value={opt.id}
+                  checked={isSelected}
+                  onChange={() => onSelect(opt.id)}
+                />
                 {opt.name}
-              </button>
+              </label>
             );
           })
         ) : (

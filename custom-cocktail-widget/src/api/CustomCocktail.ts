@@ -6,16 +6,16 @@ import * as he from 'he';
 import { getFormulaMapFromFormulaString } from "../utils/cocktail-formula-util";
 
 export const fetchCustomCocktailForCustomer = async (
-  pcid: string
+  pcid: string, ccTemplate: string
 ): Promise<CustomCocktailData> => {
   try {
     let ccData: CustomCocktailData = {
       currentFormula: "",
       prodIngredients: [],
-      selectedTemplate: ""
+      selectedTemplate: ccTemplate
     };
     if(pcid.length){
-      const ccCustomerResponse = await fetch(`https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails?siteType=SHP&siteCountry=USA&languageCode=en&preferredCustomerId=${pcid}&cocktailType=CC&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba`);
+      const ccCustomerResponse = await fetch(`https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails?siteType=SHP&siteCountry=USA&languageCode=en&preferredCustomerId=${pcid}&cocktailType=CC&templateIdSelected=${ccTemplate}&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba`);
       const returnData = await ccCustomerResponse.json();
       ccData.currentFormula = returnData.labelCode;
       ccData.prodIngredients = returnData.cocktail["product"].map((item: RawCustomCocktailData) => {

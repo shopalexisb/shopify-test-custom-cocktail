@@ -40,9 +40,14 @@ export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
     return dosesSelected >= MAX_DOSES;
   }
 
+  const selectedCocktail = ccData.savedCocktailTemplates?.find((c) => c.id === ccData.selectedTemplate);
+
   return (
     <div className={"cc-builder"}>
       <div className={"cc-builder__title"}>Select Ingredients to Build Your Custom Cocktail</div>
+      {ccData.selectedTemplate?.length > 0 && ccData.savedCocktailTemplates && (
+        <div className={"cc-builder__cc-selection"}>Chosen Cocktail: <span className={"cc-builder__cc-selection cc-builder__cc-selection--blue"}>{selectedCocktail?.name}</span></div>
+      )}
       <div>current formula: {ccData.currentFormula}</div>
       <div className={"cc-builder__prod-wrapper"}>
         {ccData.prodIngredients.map((prod) => (

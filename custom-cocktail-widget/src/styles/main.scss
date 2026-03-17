@@ -76,6 +76,13 @@
 .cc-builder {
   &__title {
     font-weight: bold;
+    font-size: 20px;
+  }
+  &__cc-selection {
+    font-weight: bold;
+    &--blue {
+      color: #098AA7;
+    }
   }
   &__prod {
     width: 200px;
@@ -132,4 +139,14 @@
 
 .cc-saved-cocktails {
   padding-top: 50px;
+  &__list {
+    display: flex;
+    flex-direction: column;
+    label {
+      cursor: pointer;
+    }
+    input {
+      margin-right: 10px;
+    }
+  }
 }

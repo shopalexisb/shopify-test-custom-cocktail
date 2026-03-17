@@ -33,18 +33,25 @@ function Widget() {
 
   useEffect(() => {
     if(pcid){
-      fetchCustomCocktailForCustomer(pcid).then(result => {
+      fetchCustomCocktailForCustomer(pcid, ccData.selectedTemplate).then(result => {
         setCCData(result);
       });
     }
-  }, [pcid]);
+  }, [pcid, ccData.selectedTemplate]);
+
+  const handleSelectTemplate = (id: string) => {
+    setCCData((prev) => ({
+      ...prev,
+      selectedTemplate: id
+    }));
+  };
 
   return (
     <div className={"cc-widget-wrapper"}>
       <div className={"cc-widget-wrapper__details"}>
         <ProductDetails />
         <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} formula={ccData.currentFormula} />
-        {/*<CustomerCocktails savedCocktails={ccData.savedCocktailTemplates} selectedTemplate={ccData.selectedTemplate}/>*/}
+        <CustomerCocktails savedCocktails={ccData.savedCocktailTemplates} selectedTemplate={ccData.selectedTemplate} onSelect={(id) => handleSelectTemplate(id)}/>
       </div>
       <CocktailBuilder ccData={ccData} setCCData={setCCData}/>
     </div>
