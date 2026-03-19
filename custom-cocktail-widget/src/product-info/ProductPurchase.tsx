@@ -6,6 +6,7 @@ import { getOptionByVariantId } from "../utils/product-option-util";
 import { Site } from "../Site";
 import { getFormattedPrice } from "../utils/currency-formatter-util";
 import { fetchCustomCocktailCost } from "../api/CustomCocktail";
+import { Warning } from "../assets/icons/Warning";
 
 interface ProductOption {
   label: string;
@@ -27,6 +28,7 @@ export const ProductPurchase: React.FC<ProductPurchaseProps> = ({
   );
 
   const [customPricing, setCustomPricing] = useState<PricingMap>();
+  const [warningMessage, setWarningMessage] = useState<string>("");
 
   useEffect(() => {
     if(formula.length){
@@ -65,7 +67,12 @@ export const ProductPurchase: React.FC<ProductPurchaseProps> = ({
         onChange={setSelectedVariant}
       />
       <div className={"cc-product__price"}>{productPrice}{isOnSale && <span className={"cc-product__price--sale"}>{getFormattedPrice(siteData, regularPrice)}</span>}</div>
-      <AddToCart variantId={selectedVariant} formula={formula} price={rawPrice} />
+      <AddToCart variantId={selectedVariant} formula={formula} price={rawPrice} setWarningMessage={setWarningMessage} />
+      { warningMessage.length > 0 &&
+        (
+          <div className="warning-wrapper" >
+            <Warning/><span className="warning-message"></span>{warningMessage}</div>
+      )}
     </div>
   );
 };

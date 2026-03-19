@@ -14,28 +14,26 @@ export const fetchCustomCocktailForCustomer = async (
       prodIngredients: [],
       selectedTemplate: ccTemplate
     };
-    if(pcid.length){
-      const ccCustomerResponse = await fetch(`https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails?siteType=SHP&siteCountry=USA&languageCode=en&preferredCustomerId=${pcid}&cocktailType=CC&templateIdSelected=${ccTemplate}&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba`);
-      const returnData = await ccCustomerResponse.json();
-      ccData.currentFormula = returnData.labelCode;
-      ccData.prodIngredients = returnData.cocktail["product"].map((item: RawCustomCocktailData) => {
-        return {
-          name: he.decode(item.name),
-          imageUrl: getImageUrlFromMAID(item.maId),
-          maxDoses: item.dosesAllowed,
-          letter: item.letter,
-          maId: item.maId,
-          dosesSelected: getDosePerIngredient(ccData.currentFormula, item.letter)
-        };
-      });
-      if(returnData.cocktail.template){
-        ccData.savedCocktailTemplates = returnData.cocktail.template.map((item: CustomCocktailTemplate) => ({
-          id: item.id,
-          name: item.name,
-        }));
-      }
-      ccData.selectedTemplate = returnData.cocktail.templateIdSelected ?? "";
+    const ccCustomerResponse = await fetch(`https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails?siteType=SHP&siteCountry=USA&languageCode=en&preferredCustomerId=${pcid ?? ""}&cocktailType=CC&templateIdSelected=${ccTemplate}&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba`);
+    const returnData = await ccCustomerResponse.json();
+    ccData.currentFormula = returnData.labelCode;
+    ccData.prodIngredients = returnData.cocktail["product"].map((item: RawCustomCocktailData) => {
+      return {
+        name: he.decode(item.name),
+        imageUrl: getImageUrlFromMAID(item.maId),
+        maxDoses: item.dosesAllowed,
+        letter: item.letter,
+        maId: item.maId,
+        dosesSelected: getDosePerIngredient(ccData.currentFormula, item.letter)
+      };
+    });
+    if(returnData.cocktail.template){
+      ccData.savedCocktailTemplates = returnData.cocktail.template.map((item: CustomCocktailTemplate) => ({
+        id: item.id,
+        name: item.name,
+      }));
     }
+    ccData.selectedTemplate = returnData.cocktail.templateIdSelected ?? "";
     return ccData;
   } catch (error) {
     console.error(`Error getting custom cocktail info for pcid: ${pcid}`, error);
@@ -54,7 +52,7 @@ export const fetchCustomCocktailCost = async (
       siteType: "SHP",
       siteCountry: "USA",
       languageCode: "en",
-      preferredCustomerId: pcid,
+      preferredCustomerId: pcid ?? "",
       cocktailType: "CC",
       merchantCountry: "USA"
     });
@@ -83,5 +81,62 @@ export const fetchCustomCocktailCost = async (
   } catch (error) {
     console.error(`Error getting custom cocktail cost: `, error);
     throw new Error("Custom cocktail cost not retrieved");
+  }
+};
+
+export const saveNewCustomCocktail = async (
+  pcid: string,
+  formula: string,
+  cocktailName: string
+): Promise<any> => {
+  return saveCustomCocktail(pcid, formula, cocktailName, "");
+};
+
+export const updateSavedCustomCocktail = async (
+  pcid: string,
+  formula: string,
+  templateId: string
+): Promise<any> => {
+  return saveCustomCocktail(pcid, formula, "", templateId);
+};
+
+
+
+const saveCustomCocktail = async (
+  pcid: string,
+  formula: string,
+  cocktailName: string,
+  templateId: string
+): Promise<any> => {
+  try {
+    const baseUrl = "https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails/templates";
+
+    const formulaMap = getFormulaMapFromFormulaString(formula);
+
+    const postData = {
+      siteType: "SHP",
+      siteCountry: "USA",
+      languageCode: "ENG",
+      preferredCustomerId: pcid,
+      isActive: "true",
+      pageMode: "3",
+      isoDoses: Object.values(formulaMap).map(String),
+      isoProductIds: Object.keys(formulaMap),
+      templateId: templateId,
+      templateName: cocktailName
+    }
+
+    const response = await fetch(`${baseUrl}?api_key=759ef1fc9e4c4e8bbf900db5f4b7caba`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error(`Error saving custom cocktail: `, error);
+    throw new Error("Custom cocktail not saved");
   }
 };

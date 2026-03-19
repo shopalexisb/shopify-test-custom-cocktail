@@ -32,11 +32,9 @@ function Widget() {
   }, []);
 
   useEffect(() => {
-    if(pcid){
-      fetchCustomCocktailForCustomer(pcid, ccData.selectedTemplate).then(result => {
-        setCCData(result);
-      });
-    }
+    fetchCustomCocktailForCustomer(pcid, ccData.selectedTemplate).then(result => {
+      setCCData(result);
+    });
   }, [pcid, ccData.selectedTemplate]);
 
   const handleSelectTemplate = (id: string) => {

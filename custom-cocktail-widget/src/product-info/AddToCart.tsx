@@ -4,13 +4,19 @@ interface IAddToCart {
   variantId: string;
   price?: string | null;
   formula?: string;
+  setWarningMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const AddToCart: React.FC<IAddToCart> = ({
-  variantId, price, formula
+  variantId, price, formula, setWarningMessage
 }) => {
 
   async function doAddToCart() {
+    if(!formula || formula?.length <= 0){
+      setWarningMessage("Please add ingredients to your custom cocktail");
+      return;
+    }
+
     const res = await fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
