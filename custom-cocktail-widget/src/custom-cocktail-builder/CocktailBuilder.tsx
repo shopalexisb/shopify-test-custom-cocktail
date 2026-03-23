@@ -2,7 +2,7 @@ import React from "react";
 import { CustomCocktailData } from "./CustomCocktailData";
 import { CocktailBuilderProdIngredient } from "./CocktailBuilderProdIngredient";
 import {
-  addIngredientToFormula,
+  addIngredientToFormula, GREENS_INGREDIENT_LETTER, INGREDIENT_GREENS_SPECIAL_DOSAGE,
   subtractIngredientToFormula
 } from "../utils/cocktail-formula-util";
 import { getDosePerIngredient } from "../utils/cocktail-ingredient-util";
@@ -34,10 +34,14 @@ export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
     setCCData(updatedCCData);
   };
 
-  const isMaxedOutDoses = () => {
+  const isMaxedOutDoses = (letter: string) => {
     const MAX_DOSES = 10;
     const dosesSelected = ccData.prodIngredients.reduce((sum, i) => sum + (i.dosesSelected ?? 0), 0);
-    return dosesSelected >= MAX_DOSES;
+    if(letter === GREENS_INGREDIENT_LETTER){
+      return dosesSelected >= MAX_DOSES - INGREDIENT_GREENS_SPECIAL_DOSAGE;
+    } else {
+      return dosesSelected >= MAX_DOSES;
+    }
   }
 
   const selectedCocktail = ccData.savedCocktailTemplates?.find((c) => c.id === ccData.selectedTemplate);
@@ -51,7 +55,7 @@ export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
       <div>current formula: {ccData.currentFormula}</div>
       <div className={"cc-builder__prod-wrapper"}>
         {ccData.prodIngredients.map((prod) => (
-          <CocktailBuilderProdIngredient prodIngredient={prod} onAddDose={handleFormulaUpdate} onSubtractDose={handleFormulaUpdate} isMaxedOutDoses={isMaxedOutDoses()} />
+          <CocktailBuilderProdIngredient prodIngredient={prod} onAddDose={handleFormulaUpdate} onSubtractDose={handleFormulaUpdate} isMaxedOutDoses={isMaxedOutDoses(prod.letter)} />
         ))}
       </div>
     </div>

@@ -1,5 +1,5 @@
-const INGREDIENT_GREENS_SPECIAL_DOSAGE = 3; //greens can only have zero or 3 doses
-const GREENS_INGREDIENT_LETTER = "S";
+export const INGREDIENT_GREENS_SPECIAL_DOSAGE = 3; //greens can only have zero or 3 doses
+export const GREENS_INGREDIENT_LETTER = "S";
 
 export const getFormulaMapFromFormulaString = (formula: string): Record<string, number> => {
   return [...formula].reduce((acc, char) => {
