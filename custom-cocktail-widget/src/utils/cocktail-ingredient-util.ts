@@ -1,3 +1,5 @@
+import {Nutrient} from "../custom-cocktail-builder/ProductIngredient";
+
 /**
  * Maps MA sku of the ingredient product to a prodContainerId
  */
@@ -41,4 +43,20 @@ export const getDosePerIngredient = (formula: string, letter: string): number =>
   }
 
   return count;
+};
+
+export const getNutrientsPerIngredient = (ingredientNutrientList: any[], nutrientList: Nutrient[]): Nutrient[] => {
+  const IngredientNutrients: Nutrient[] = [];
+  nutrientList.forEach((n, index) => {
+    const ingredientValue: number = ingredientNutrientList[index];
+
+    if(ingredientValue){
+      const nutrient: Nutrient = {
+        name: n.name,
+        percentage: Math.round((ingredientValue / n.percentage) * 100),
+      }
+      IngredientNutrients.push(nutrient);
+    }
+  });
+  return IngredientNutrients;
 };

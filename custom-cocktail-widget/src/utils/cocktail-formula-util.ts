@@ -1,3 +1,6 @@
+const INGREDIENT_GREENS_SPECIAL_DOSAGE = 3; //greens can only have zero or 3 doses
+const GREENS_INGREDIENT_LETTER = "S";
+
 export const getFormulaMapFromFormulaString = (formula: string): Record<string, number> => {
   return [...formula].reduce((acc, char) => {
     acc[char] = (acc[char] || 0) + 1;
@@ -21,7 +24,7 @@ export const addIngredientToFormula = (
   let formulaMap = getFormulaMapFromFormulaString(formula);
   formulaMap = {
     ...formulaMap,
-    [ingredientLetter]: (formulaMap[ingredientLetter] || 0) + 1
+    [ingredientLetter]: (formulaMap[ingredientLetter] || 0) + getServingIncrementForIngredient(ingredientLetter)
   };
   formula = getFormulaStringFromFormulaMap(formulaMap);
   return formula;
@@ -34,8 +37,12 @@ export const subtractIngredientToFormula = (
   let formulaMap = getFormulaMapFromFormulaString(formula);
   formulaMap = {
     ...formulaMap,
-    [ingredientLetter]: (formulaMap[ingredientLetter] || 0) - 1
+    [ingredientLetter]: (formulaMap[ingredientLetter] || 0) - getServingIncrementForIngredient(ingredientLetter)
   };
   formula = getFormulaStringFromFormulaMap(formulaMap);
   return formula;
 };
+
+const getServingIncrementForIngredient = (ingredientLetter: string): number => {
+  return ingredientLetter === GREENS_INGREDIENT_LETTER ? INGREDIENT_GREENS_SPECIAL_DOSAGE : 1;
+}

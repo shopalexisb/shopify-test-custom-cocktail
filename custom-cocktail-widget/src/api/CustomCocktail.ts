@@ -1,9 +1,10 @@
 import { PricingMap } from "../product-info/CustomPrice";
-import {CustomCocktailData, CustomCocktailTemplate} from "../custom-cocktail-builder/CustomCocktailData";
-import { RawCustomCocktailData } from "./RawCustomCocktailData";
-import { getDosePerIngredient, getImageUrlFromMAID } from "../utils/cocktail-ingredient-util";
+import { CustomCocktailData, CustomCocktailTemplate } from "../custom-cocktail-builder/CustomCocktailData";
+import { RawCustomCocktailData, RawNutrientData } from "./RawCustomCocktailData";
+import { getDosePerIngredient, getImageUrlFromMAID, getNutrientsPerIngredient } from "../utils/cocktail-ingredient-util";
 import * as he from 'he';
 import { getFormulaMapFromFormulaString } from "../utils/cocktail-formula-util";
+import { Nutrient } from "../custom-cocktail-builder/ProductIngredient";
 
 export const fetchCustomCocktailForCustomer = async (
   pcid: string, ccTemplate: string
@@ -17,6 +18,12 @@ export const fetchCustomCocktailForCustomer = async (
     const ccCustomerResponse = await fetch(`https://stagingapi2.shop.com/custom-cocktail-service/v1/custom-cocktails?siteType=SHP&siteCountry=USA&languageCode=en&preferredCustomerId=${pcid ?? ""}&cocktailType=CC&templateIdSelected=${ccTemplate}&api_key=759ef1fc9e4c4e8bbf900db5f4b7caba`);
     const returnData = await ccCustomerResponse.json();
     ccData.currentFormula = returnData.labelCode;
+    const nutrients: Nutrient[] = returnData["nutrient"].map((item: RawNutrientData) => {
+      return {
+        name: item.name,
+        percentage: item.ulPercent
+      };
+    });
     ccData.prodIngredients = returnData.cocktail["product"].map((item: RawCustomCocktailData) => {
       return {
         name: he.decode(item.name),
@@ -24,7 +31,8 @@ export const fetchCustomCocktailForCustomer = async (
         maxDoses: item.dosesAllowed,
         letter: item.letter,
         maId: item.maId,
-        dosesSelected: getDosePerIngredient(ccData.currentFormula, item.letter)
+        dosesSelected: getDosePerIngredient(ccData.currentFormula, item.letter),
+        nutrients: getNutrientsPerIngredient(item.ingredientNutrientList, nutrients)
       };
     });
     if(returnData.cocktail.template){

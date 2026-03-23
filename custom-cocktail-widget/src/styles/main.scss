@@ -105,6 +105,13 @@
     &-letter {
       display: none;
     }
+    &-nutrient-info{
+      display: flex;
+      cursor: pointer;
+      &__text {
+        font-size: 12px;
+      }
+    }
     &-action {
       display: flex;
       gap: 20px;
