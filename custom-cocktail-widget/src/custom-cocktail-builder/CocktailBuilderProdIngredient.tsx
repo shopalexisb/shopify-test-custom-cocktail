@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { ProductIngredient } from "./ProductIngredient";
 import { Info } from "../assets/icons/Info";
 import { CocktailBuilderNutrients } from "./CocktailBuilderNutrients";
@@ -8,16 +8,13 @@ interface ProductPurchaseProps {
   onAddDose: (letter: string, actionType: string) => void;
   onSubtractDose: (letter: string, actionType: string) => void;
   isMaxedOutDoses: boolean;
+  isOpen: boolean;
+  onNutrientsToggle: (letter: string) => void;
 }
 
 export const CocktailBuilderProdIngredient: React.FC<ProductPurchaseProps> = ({
-                                                                  prodIngredient, onAddDose, onSubtractDose, isMaxedOutDoses
+                                                                  prodIngredient, onAddDose, onSubtractDose, isMaxedOutDoses, isOpen, onNutrientsToggle
                                                                 }) => {
-  const [showNutrientsWidget, setShowNutrientsWidget] = useState(false);
-
-  const toggleNutrientsWidget= () => {
-    setShowNutrientsWidget(true);
-  }
 
   return (
     <div className={"cc-builder__prod"}>
@@ -25,12 +22,12 @@ export const CocktailBuilderProdIngredient: React.FC<ProductPurchaseProps> = ({
       <img className={"cc-builder__prod-img"} alt={prodIngredient.name} src={prodIngredient.imageUrl} />
       <div className={"cc-builder__prod-letter"}>{prodIngredient.letter}</div>
       <div className={"cc-builder__prod-nutrient-info"}><span className={"cc-builder__prod-nutrient-info__text"}>See Nutrient Info</span>
-        <Info size={20} onClick={() => toggleNutrientsWidget()}/>
-        <div className={"cc-builder__nutrient-wrapper"}>
-          { showNutrientsWidget && (
-            <CocktailBuilderNutrients nutrients={prodIngredient.nutrients} />
-          )}
-        </div>
+        <Info size={20} onClick={() => onNutrientsToggle(prodIngredient.letter)}/>
+      </div>
+      <div className={"cc-builder__nutrient-wrapper"}>
+        { isOpen && (
+          <CocktailBuilderNutrients nutrients={prodIngredient.nutrients} />
+        )}
       </div>
       <div className={"cc-builder__prod-action"}>
         <button onClick={() => onSubtractDose(prodIngredient.letter, "subtract")}

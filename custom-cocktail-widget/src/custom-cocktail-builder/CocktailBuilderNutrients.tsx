@@ -14,9 +14,9 @@ export const CocktailBuilderNutrients: React.FC<ProductPurchaseProps> = ({
       {nutrients
         .filter(nutrient => nutrient.percentage > 0)
         .map((nutrient, index) => (
-          <div key={index}>
+          <div className={"cc-builder__nutrient-widget-text"} key={index}>
             <span>{nutrient.name}</span>
-            <span>{nutrient.percentage} %</span>
+            <span>{nutrient.percentage}%</span>
           </div>
         ))}
     </div>
