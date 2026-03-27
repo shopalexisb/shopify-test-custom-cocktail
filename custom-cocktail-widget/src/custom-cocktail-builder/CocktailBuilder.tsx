@@ -6,6 +6,7 @@ import {
   subtractIngredientToFormula
 } from "../utils/cocktail-formula-util";
 import { getDosePerIngredient } from "../utils/cocktail-ingredient-util";
+import { getSelectedCocktail } from "../utils/cocktail-template-util";
 
 interface ProductPurchaseProps {
   ccData: CustomCocktailData;
@@ -50,7 +51,7 @@ export const CocktailBuilder: React.FC<ProductPurchaseProps> = ({
     }
   }
 
-  const selectedCocktail = ccData.savedCocktailTemplates?.find((c) => c.id === ccData.selectedTemplate);
+  const selectedCocktail = getSelectedCocktail(ccData);
 
   return (
     <div className={"cc-builder"}>

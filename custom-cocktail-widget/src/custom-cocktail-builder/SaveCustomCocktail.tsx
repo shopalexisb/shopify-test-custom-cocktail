@@ -1,13 +1,15 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { SaveCustomCocktailPrompt } from "./SaveCustomCocktailPrompt";
 
-interface IAddToCart {
-  formula?: string;
-  templateId?: string;
+interface ISaveCC {
+  pcid: string;
+  formula: string;
+  templateId: string;
+  templateName?: string;
 }
 
-export const SaveCustomCocktail: React.FC<IAddToCart> = ({
-  formula, templateId
+export const SaveCustomCocktail: React.FC<ISaveCC> = ({
+  pcid, formula, templateId, templateName
 }) => {
 
   const [showPrompt, setShowPrompt] = useState(false);
@@ -22,7 +24,7 @@ export const SaveCustomCocktail: React.FC<IAddToCart> = ({
         Save Custom Cocktail
       </button>
       {showPrompt && (
-        <SaveCustomCocktailPrompt formula={formula} templateId={templateId}/>
+        <SaveCustomCocktailPrompt pcid={pcid} formula={formula} templateId={templateId} templateName={templateName} onClose={() => setShowPrompt(false)}/>
       )}
     </div>
 

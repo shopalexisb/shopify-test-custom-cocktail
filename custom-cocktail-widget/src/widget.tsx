@@ -13,7 +13,8 @@ import { CocktailBuilder } from "./custom-cocktail-builder/CocktailBuilder";
 import { fetchCustomCocktailForCustomer } from "./api/CustomCocktail";
 import { CustomCocktailData } from "./custom-cocktail-builder/CustomCocktailData";
 import { CustomerCocktails } from "./customer-cocktail-info/CustomerCocktails";
-import {SaveCustomCocktail} from "./custom-cocktail-builder/SaveCustomCocktail";
+import { SaveCustomCocktail } from "./custom-cocktail-builder/SaveCustomCocktail";
+import {getSelectedCocktail} from "./utils/cocktail-template-util";
 
 function Widget() {
   const [pcid, setPcid] = useState("");
@@ -45,13 +46,15 @@ function Widget() {
     }));
   };
 
+  const selectedCocktail = getSelectedCocktail(ccData);
+
   return (
     <div className={"cc-widget-wrapper"}>
       <div className={"cc-widget-wrapper__details"}>
         <ProductDetails />
         <ProductPurchase options={CUSTOM_COCKTAIL_OPTIONS} pcid={pcid} siteData={siteData} formula={ccData.currentFormula} />
         <CustomerCocktails savedCocktails={ccData.savedCocktailTemplates} selectedTemplate={ccData.selectedTemplate} onSelect={(id) => handleSelectTemplate(id)}/>
-        <SaveCustomCocktail formula={ccData.currentFormula} templateId={ccData.selectedTemplate}/>
+        <SaveCustomCocktail pcid={pcid} formula={ccData.currentFormula} templateId={ccData.selectedTemplate} templateName={selectedCocktail?.name}/>
       </div>
       <CocktailBuilder ccData={ccData} setCCData={setCCData}/>
     </div>

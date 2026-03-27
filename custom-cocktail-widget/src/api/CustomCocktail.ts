@@ -103,9 +103,10 @@ export const saveNewCustomCocktail = async (
 export const updateSavedCustomCocktail = async (
   pcid: string,
   formula: string,
-  templateId: string
+  templateId: string,
+  templateName: string
 ): Promise<any> => {
-  return saveCustomCocktail(pcid, formula, "", templateId);
+  return saveCustomCocktail(pcid, formula, templateName, templateId);
 };
 
 

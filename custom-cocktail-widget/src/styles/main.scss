@@ -70,6 +70,10 @@
     font-weight: bold;
     max-width: 280px;
     width: 100%;
+    &--secondary {
+      background-color: #ffffff;
+      color: #414467;
+    }
   }
 }
 
@@ -227,6 +231,20 @@
 
 .cc-overlay-container {
   @extend %overlay-main;
-  max-width: 500px;
+  max-width: 800px;
   width: 100%;
 }
+
+.cc-overlay {
+  &__options {
+    display: flex;
+    flex-direction: column;
+  }
+  &__buttons {
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+}
+
+
